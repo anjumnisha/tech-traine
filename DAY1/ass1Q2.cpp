@@ -24,7 +24,7 @@ int main()
             first=first*100;
         else
             first=first*10+n%10;
-    n=n/10;
+        n=n/10;
     }
     first=first*10+last;
 
