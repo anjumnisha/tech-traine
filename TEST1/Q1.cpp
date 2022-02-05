@@ -33,13 +33,13 @@ Window position                Max
     {
         max=arr[i];
         for(int j=i+1;j<i+k;j++)
-        {
+        {   //finding maximum in window
             if(max<arr[j])
             {
              max=arr[j];
             }
         }
-        ans[i]=max;
+        ans[i]=max;         //store maximum in ans array
     }
 
     for(int i=0;i<(n-k+1);i++)

@@ -27,6 +27,7 @@ int main()
         for(int i=row-1;i>=0;i--)
             cout<<mat[i][c]<<" ";
         c++;
+        cout<<"\n";
     }
     cout<<"\n";
     return 0;

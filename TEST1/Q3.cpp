@@ -10,6 +10,8 @@ note: 1<= num1.length, num2.length <= 200
 num1 and num2 consist of digits only.
 Both num1 and num2 do not contain any leading zero, except the number 0 itself.*/
 #include<iostream>
+#include<sstream>
+#include<string>
 using namespace std;
 int main()
 {
@@ -17,7 +19,17 @@ int main()
     cout<<"Enter number string num1 and num2 :";
     cin>>num1>>num2;
 
-    int s1;
-    int s2;
+    int no1, no2;
+    stringstream n1(num1);
+    n1>>no1;
+    stringstream n2(num2);
+    n2>>no2;
+
+    int pro=no1*no2;
+
+    ostringstream str1;
+    str1<<pro;
+    string product = str1.str();
+    cout<<"product string : "<<product;
     return 0;
 }

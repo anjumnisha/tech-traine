@@ -1,0 +1,83 @@
+/*Q1.Write a program to depict Indian Politics.
+Consider the politics use cases :
+MP: is a person who won from a constituency
+getConstituency - return their winning constituency.
+getDriver - returns the driver assigned for their vehicle (default car).
+exceedsSpendingLimit - returns true or false if Mps exceeds to their spending limit.
+PM->Ministers->MP (All of them are MPS) - PM has special permissions such as it can give permission to arrest any minister.
+PM enjoys special benefits such as Aircraft (along with car) and its designated driver.
+Note: PM spending limit : 1 crore, Ministers: 10 lakhs, MP: 1 lakh.
+Need to design in a way  where Commisioner class can arrest MP, Ministers and PM when their expense exceeds their spending limit:
+canArrest - can arrest one or many MP.
+           Note: If PM  cant arrest.
+                 If minister can arrest with PM permission
+                if mps they can be arrested without anyones permission.
+In Short, If the MP is not PM then he can be arrested by commissioner , If he is minister then can be arrested with PMs permisison.*/
+
+#include<iostream>
+using namespace std;
+
+//we are creating a class vehicle as an abstract class
+class Vehicle
+{
+public:
+    virtual void getVehicle()=0;      //pure virtual function of abstract class vehicle->which is implemented in derived class
+};
+
+class Constituency :public Vehicle      //inherited abstract class vehicle
+{
+    string area;
+    int pincode;
+    string state;
+public:
+    void inputConstituency(string area, int pin, string state)
+    {
+        this->area=area;
+        pincode=pin;
+        this->state=state;
+        cout<<"Constituency - "<<area<<" "<<pincode<<" "<<state;
+    }
+    void getVehicle()       //parent class function
+    {
+        cout<<"Vehicle - CAR \n";
+    }
+};
+
+//class MP
+class MP : public Constituency , public Vehicle
+{
+public:
+    void getVehicle()       //parent class function
+    {
+        cout<<"Vehicle - CAR \n";
+    }
+};
+
+//class PM inherit MP class and Vehicle class
+class PM : public MP , public Vehicle
+{
+public:
+    void getVehicle()       //parent class function
+    {
+        cout<<"Vehicle - CAR and AIRCRAFT \n";
+    }
+};
+
+//class M inherit MP class and Vehicle clsss
+class M : public MP , public Vehicle
+{
+public:
+    void getVehicle()       //parent class function
+    {
+        cout<<"Vehicle - CAR \n";
+    }
+};
+
+//main function
+int main()
+{
+    Vehicle *v= new Constituency();     //creating a vehicle pointer object for constituency
+    v->getVehicle();
+return 0;
+}
+
