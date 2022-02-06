@@ -11,3 +11,17 @@ so PCU comes with battery but GTI have no battery,
 Solar Inverter also have GRID On , system where you can sell your extra energy back,
 GTI is GRID On where as this feature is not available in PCU,
 Non Solar Inverters are Simple Home Inverters Which have a Battery,*/
+
+#include<iostream>
+using namespace std;
+//class inverter
+class Inverter
+{
+
+};
+
+int main()
+{
+
+    return 0;
+}

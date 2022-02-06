@@ -8,8 +8,8 @@ Each Box has some basic properties :  length,height,width,area, flute;
 A box can either use pins or pasting() to join.
 A box can either single part or double part.
 there are 7 types of flute : A,B,C,E,F,G and B(B is mostly used).a flute has gsm and extra gsm;
-you need to calcuate cost of a box  : area * totalGSM * ExtraGSM * stitching cost (if double part cost is multiplied by 3)
-where as Area : length * width * hightand total GSM : extraGSM + GSM * 100;and Extra GSM For Flute :
+you need to calculate cost of a box  : area * totalGSM * ExtraGSM * stitching cost (if double part cost is multiplied by 3)
+where as Area : length * width * hight and total GSM : extraGSM + GSM * 100;and Extra GSM For Flute :
 A = 10,B = 30,C = 20,E = 40,F =50,G = 20
 and stitching cost :1.if box has a pin then  :  10rs per pin
 2.if box has a pasting then cost is :
@@ -20,6 +20,7 @@ and stitching cost :1.if box has a pin then  :  10rs per pin
 5. TopOpening SnapLock = 50*/
 #include<iostream>
 using namespace std;
+
 //class flute
 class Flute
 {
@@ -101,48 +102,53 @@ public:
 			return cost;
 		}
 };
+
 //class box
 class Box
 {
 protected:
-    int length;
-	int height;
-	int width;
-	int area;
-	Flute flutE;
-	int totalGSM;
-	int stitchingCost;
-	int part;
+    int length , height , width , area , totalGSM , stitchingCost , part;
+	Flute* flute;
 public:
 	string type;
 		Box()
 		{		}
-		void setBox(int length, int width, int height, int part){
+		void setBox(int length, int width, int height, int part)
+		{
 			this->length = length;
 			this->width = width;
 			this->height = height;
 			this->part = part;
 		}
-		long long int calculateCost(Flute flute){
+		join(Pin* pin)
+		{
+			int amount;
+			cout<<"\nEnter Required pin : ";
+			cin>>amount;
+			stitchingCost = pin->getCost(amount);
+			if(part==2)
+                stitchingCost*=3;
+		}
+		join(Paste* paste)
+		{   string type;
+		    cout<<"\nEnter Paste type : ";
+		    cin>>type;
+			stitchingCost = paste->getCost(type);
+			if(part==2)
+                stitchingCost*=3;
+		}
+		float calculateCost(Flute* flute)
+		{
+		    this->flute=flute;
 			area = length*height*width;
-			totalGSM = (flute.extraGSM+flute.GSM)*100;
+			totalGSM = (flute->extraGSM+flute->GSM)*100;
 
 			int totalCost;
-			totalCost = area*totalGSM*flute.extraGSM*stitchingCost;
+			totalCost = area*totalGSM*flute->extraGSM*stitchingCost;
 			return totalCost;
 		}
-		join(Pin pin){
-			int amount;
-			cout<<endl<<"Enter Required pin : ";
-			cin>>amount;
-			stitchingCost = pin.getCost(amount);
-			if(part==2) stitchingCost*=3;
-		}
-		join(Paste paste){
-			stitchingCost = paste.getCost(type);
-			if(part==2) stitchingCost*=3;
-		}
 };
+
 //class Universal
 class Universal : public Box
 {
@@ -191,12 +197,22 @@ public:
 
 int main()
 {
+    cout<<"Universal box - FluteA ";
 	FluteA fluteA;
 	Pin pin;
 	Universal universal;
 	int part = 1;
-	universal.setBox(10,10,10,part);
-	universal.join(pin);
-    cout<<universal.calculateCost(fluteA);
+	universal.setBox(15,15,15,part);
+	universal.join(&pin);
+    cout<<universal.calculateCost(&fluteA);
+
+    cout<<"\nHoney Comb box - FluteB ";
+	FluteB fluteB;
+	HoneyComb honeyComb;
+	part = 2;
+	honeyComb.setBox(10,10,10,part);
+	honeyComb.join(&pin);
+	cout<<honeyComb.calculateCost(&fluteB);
+
 	return 0;
 }

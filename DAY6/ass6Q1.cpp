@@ -17,11 +17,36 @@ In Short, If the MP is not PM then he can be arrested by commissioner , If he is
 #include<iostream>
 using namespace std;
 
-//we are creating a class vehicle as an abstract class
+//class vehicle
 class Vehicle
 {
 public:
-    virtual void getVehicle()=0;      //pure virtual function of abstract class vehicle->which is implemented in derived class
+    string type;
+    Vehicle(string type)        //vehicle class constructor
+    {
+        this->type=type;
+        cout<<"Vehicle - "<<type<<"\n";
+    }
+};
+
+//class car -> derived from vehicle class
+class Car: public Vehicle
+{
+public:
+    Car(string type):Vehicle(type)
+    {
+
+    }
+};
+
+//class aricraft -> derived from vehicle class
+class Aircraft : public Vehicle
+{
+public:
+    Aircraft(string type):Vehicle(type)
+    {
+
+    }
 };
 
 //class Constituency
@@ -40,13 +65,19 @@ public:
 };
 
 //class MP
-class MP : public Vehicle
+class MP
 {
 protected:
-    //MP has Constituency
+    //MP has Constituency and Vehicle (aggregation)
     Constituency* constituency;
+    Vehicle* vehicle;
 public:
     int spendinglimit=100000;
+    void getVehicle(Vehicle* vehicle)
+    {
+        this->vehicle=vehicle;
+        cout<<"Vehicle - "<<vehicle->type;
+    }
     void getConstituency(Constituency* constituency)
     {
         this->constituency=constituency;
@@ -55,10 +86,6 @@ public:
     void spendingLimit()
     {
         cout<<"Spending Limit - "<<spendinglimit<<"\n";
-    }
-    void getVehicle()       //parent class function
-    {
-        cout<<"Vehicle - CAR \n";
     }
     bool exceedSpendingLimit(int spen)
     {
@@ -70,27 +97,19 @@ public:
 };
 
 //class M inherit MP class and Vehicle clsss
-class M : public MP
+class Minister : public MP
 {
-public:
-    void getVehicle()       //parent class function
-    {
-        cout<<"Vehicle - CAR \n";
-    }
 };
 
 //class PM inherit MP class and Vehicle class
-class PM : public MP
+class PrimeMinister : public MP
 {
 public:
-    bool permission;
-    void givePermission(bool permission )
+    int permission;
+    PrimeMinister(){}       //default constructor
+    PrimeMinister(int permission )         //parameterized contructor
     {
         this->permission=permission;
-    }
-    void getVehicle()       //parent class function
-    {
-        cout<<"Vehicle - CAR and AIRCRAFT \n";
     }
 };
 
@@ -98,13 +117,18 @@ public:
 class Commissioner
 {
 public:
-    PM* pm;
-    bool getPermission(bool p)
+    PrimeMinister* primeminister;       //using aggregation-> commissionew has PM permission
+    void getPermission(PrimeMinister* primeminister)
     {
-        if(pm->givePermission(p))
+        this->primeminister=primeminister;
+        if(primeminister->permission==1)
         {
-         cout<<"Permission - TRUE";
-         cout<<"*ARRESTED*\n";      }
+            cout<<"**ARRESTED**\n";
+        }
+        else
+        {
+            cout<<"**NOT ARRESTED**\n";
+        }
     }
 };
 
@@ -113,22 +137,22 @@ int main()
 {
     cout<<"***MP****\n";
     MP mP;
+    //Vehicle vehicle=Vehicle("CAR");       //also work but it create vehicle object
+    //mP.getVehicle(&vehicle);
+    Vehicle* vehicle = new Car("CAR");      //creating car object as vehicle
     mP.spendingLimit();
     Constituency c = Constituency("Pitampura",110042,"Delhi");
     mP.getConstituency(&c);
-    Vehicle *mp = new MP();
-    mp->getVehicle();
     int spen;
     cout<<"Enter spending amount ";
     cin>>spen;
     bool sp=mP.exceedSpendingLimit(spen);
     if(sp==true)
        { cout<<"Exceeds Spending Limit\n";
-         PM prime;
-         bool per;
-         cout<<"Enter PM permission to ARREST(true/false)\n";
+         int per;
+         cout<<"Enter PM permission to ARREST(1/0)\n";
          cin>>per;
-         prime.givePermission(per);
+         PrimeMinister prime(per);
          Commissioner com;
          com.getPermission(&prime);
        }
@@ -137,10 +161,11 @@ int main()
 
 
     cout<<"\n***PM****\n";
-    MP *p = new PM();
+    MP *p = new PrimeMinister();
+    Vehicle* pmvehicle1 = new Car("CAR");
+    Vehicle* pmvehicle2 = new Aircraft("AIRCRAFT");
     p->spendinglimit=10000000;
     p->spendingLimit();
-    p->getVehicle();
     cout<<"Enter spending amount ";
     cin>>spen;
     sp=p->exceedSpendingLimit(spen);
@@ -151,15 +176,22 @@ int main()
 
 
     cout<<"\n***M****\n";
-    MP *m=new M();
+    MP *m=new Minister();
+    Vehicle* m1vehicle = new Car("CAR");
     m->spendinglimit=1000000;
     m->spendingLimit();
-    m->getVehicle();
     cout<<"Enter spending amount ";
     cin>>spen;
     sp=m->exceedSpendingLimit(spen);
     if(sp==true)
-        cout<<"Exceeds Spending Limit\n";
+        {cout<<"Exceeds Spending Limit\n";
+         int mper;
+         cout<<"Enter PM permission to ARREST(1/0)\n";
+         cin>>mper;
+         PrimeMinister prime2(mper);
+         Commissioner com2;
+         com2.getPermission(&prime2);
+        }
     else
     {   cout<<"Do Not Exceeds Spending Limit\n";    }
 
